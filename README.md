@@ -45,3 +45,7 @@ Inspired by the *ideas* behind AWS Lambda Powertools (structured logs + custom m
 ## License
 
 MIT
+
+## Local testing
+
+Unit tests are credential-free and do not call AWS. Run `pytest -q` after installing with `pip install -e ".[dev]"`.
