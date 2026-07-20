@@ -22,10 +22,10 @@ def handler(event: dict[str, Any], context: Any = None) -> dict[str, Any]:
 
     metrics.add_metric("Invocations", 1, unit="Count")
     try:
-        message = f"hello {name}"
+        greeting = f"hello {name}"
         metrics.add_metric("Success", 1, unit="Count")
-        bound.info("invocation succeeded", message=message)
-        return {"ok": True, "message": message}
+        bound.info("invocation succeeded", greeting=greeting)
+        return {"ok": True, "message": greeting}
     except Exception as exc:  # pragma: no cover - defensive
         metrics.add_metric("Errors", 1, unit="Count")
         bound.error("invocation failed", error=str(exc))
