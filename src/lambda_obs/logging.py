@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import sys
 import time
+import uuid
 from typing import Any, Mapping, MutableMapping, TextIO
 
 
@@ -17,15 +18,23 @@ class Logger:
         *,
         stream: TextIO | None = None,
         base: Mapping[str, Any] | None = None,
+        correlation_id: str | None = None,
     ) -> None:
         self.service = service
         self.stream = stream or sys.stdout
         self._base: dict[str, Any] = dict(base or {})
+        if correlation_id:
+            self._base.setdefault("correlation_id", correlation_id)
 
     def bind(self, **kwargs: Any) -> "Logger":
         merged = {**self._base, **kwargs}
         child = Logger(self.service, stream=self.stream, base=merged)
         return child
+
+    def with_correlation_id(self, correlation_id: str | None = None) -> "Logger":
+        """Return a child logger bound to a correlation id (generated if omitted)."""
+        cid = correlation_id or str(uuid.uuid4())
+        return self.bind(correlation_id=cid)
 
     def _emit(self, level: str, message: str, **fields: Any) -> None:
         payload: MutableMapping[str, Any] = {
