@@ -24,3 +24,20 @@ def test_logger_bind_adds_fields():
     payload = json.loads(buf.getvalue().strip())
     assert payload["cold_start"] is True
     assert payload["level"] == "WARNING"
+
+
+def test_logger_with_correlation_id():
+    buf = io.StringIO()
+    log = Logger("demo", stream=buf).with_correlation_id("corr-123")
+    log.info("traced")
+    payload = json.loads(buf.getvalue().strip())
+    assert payload["correlation_id"] == "corr-123"
+
+
+def test_logger_generates_correlation_id():
+    buf = io.StringIO()
+    log = Logger("demo", stream=buf).with_correlation_id()
+    log.info("traced")
+    payload = json.loads(buf.getvalue().strip())
+    assert "correlation_id" in payload
+    assert len(payload["correlation_id"]) > 0
