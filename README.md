@@ -2,6 +2,22 @@
 
 Minimal AWS Lambda starter with **structured JSON logging**, a small **metrics helper**, and **local unit tests**. No AWS account or credentials required.
 
+## Observability quickstart
+
+This starter is meant to get Lambda-style workloads emitting useful signals quickly.
+
+1. **Traces** — wrap handler entry/exit so cold starts and downstream calls are visible.
+2. **Metrics** — emit latency, error count, and at least one business/custom metric.
+3. **Logs** — keep structured JSON logs with `request_id` / correlation fields for joins.
+
+### Minimal checklist before first deploy
+
+- Confirm the runtime exporter (or OTEL collector sidecar) is configured for your account/region.
+- Verify one successful invocation shows up in your observability backend with matching trace + log correlation.
+- Fail a canary on purpose once and confirm the error metric and alert path fire.
+
+See the sample handlers and config in this repo for a concrete wiring pattern you can copy.
+
 ## Features
 
 - Structured logger that emits one JSON object per line (CloudWatch-friendly)
