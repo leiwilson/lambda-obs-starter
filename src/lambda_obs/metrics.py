@@ -32,6 +32,15 @@ class Metrics:
         self._values[name] = self._values.get(name, 0.0) + float(value)
         self._units[name] = unit
 
+    def set_metric(self, name: str, value: float, unit: str = "None") -> None:
+        """Set an absolute gauge value (does not accumulate)."""
+        self._values[name] = float(value)
+        self._units[name] = unit
+
+    def timing(self, name: str, milliseconds: float) -> None:
+        """Record a latency sample in milliseconds."""
+        self.add_metric(name, milliseconds, unit="Milliseconds")
+
     def clear(self) -> None:
         self._values.clear()
         self._units.clear()
